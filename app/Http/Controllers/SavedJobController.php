@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\User;  // Add this
+use App\Models\SavedJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SavedJobController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
-        $savedJobs = auth()->user()
-            ->savedJobs()
+        // Get the authenticated user with eager loading
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Load the relationship explicitly
+        $savedJobs = SavedJob::where('user_id', $user->id)
             ->with('job.user')
             ->latest()
             ->paginate(10);
@@ -25,7 +29,14 @@ class SavedJobController extends Controller
 
     public function store(Job $job)
     {
-        auth()->user()->savedJobs()->create([
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Create directly with SavedJob model
+        SavedJob::create([
+            'user_id' => $user->id,
             'job_id' => $job->id
         ]);
 
@@ -34,8 +45,8 @@ class SavedJobController extends Controller
 
     public function destroy(Job $job)
     {
-        auth()->user()
-            ->savedJobs()
+        // Delete using the SavedJob model directly
+        SavedJob::where('user_id', Auth::id())
             ->where('job_id', $job->id)
             ->delete();
 

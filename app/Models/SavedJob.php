@@ -9,6 +9,8 @@ class SavedJob extends Model
 {
     use HasFactory;
 
+    protected $table = "saved_jobs";
+
     protected $fillable = [
         'user_id',
         'job_id'

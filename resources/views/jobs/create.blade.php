@@ -12,7 +12,7 @@
                             <div>
                                 <label for="title" class="block text-sm font-medium text-gray-700">Jobtitel</label>
                                 <input type="text" name="title" id="title" value="{{ old('title') }}"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('title') border-red-500 @enderror">
+                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('title') border-red-500 @enderror">
                                 @error('title')
                                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                                 @enderror
@@ -21,7 +21,7 @@
                             <div>
                                 <label for="company" class="block text-sm font-medium text-gray-700">Unternehmen</label>
                                 <input type="text" name="company" id="company" value="{{ old('company') }}"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('company') border-red-500 @enderror">
+                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('company') border-red-500 @enderror">
                                 @error('company')
                                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                                 @enderror

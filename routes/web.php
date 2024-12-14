@@ -5,23 +5,24 @@ use App\Http\Controllers\SavedJobController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes für Job Board System
-|--------------------------------------------------------------------------
-|
-| Hier werden alle Web-Routes für das Job Board System definiert.
-| Includes: Public Routes, Auth Routes, und Protected Routes
-|
-*/
+// Welcome page for guests (NOT logged in)
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
 
-// Öffentliche Routes
-Route::get('/', [JobController::class, 'index'])
+// Dashboard for logged in users
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+// Jobs Routes
+Route::get('/home', [JobController::class, 'index'])
+    ->middleware(['auth'])
     ->name('home');
 
-// Job Routes mit gruppierten Middleware
+// Job Routes with grouped middleware
 Route::prefix('jobs')->group(function () {
-    // Öffentliche Job Routes
+    // Public Job Routes
     Route::get('/', [JobController::class, 'index'])
         ->name('jobs.index');
 
@@ -29,9 +30,9 @@ Route::prefix('jobs')->group(function () {
         ->name('jobs.show')
         ->where('job', '[0-9]+');
 
-    // Geschützte Job Routes (nur für eingeloggte Benutzer)
+    // Routes for logged-in users
     Route::middleware(['auth'])->group(function () {
-        // Nur für Arbeitgeber
+        // Employer only routes
         Route::middleware(['employer'])->group(function () {
             Route::get('/create', [JobController::class, 'create'])
                 ->name('jobs.create');
@@ -51,7 +52,7 @@ Route::prefix('jobs')->group(function () {
     });
 });
 
-// Gespeicherte Jobs Routes (nur für eingeloggte Benutzer)
+// Routes for logged-in users
 Route::middleware(['auth'])->group(function () {
     Route::prefix('saved-jobs')->group(function () {
         Route::get('/', [SavedJobController::class, 'index'])
@@ -65,5 +66,4 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-// Auth Routes (von Breeze bereitgestellt)
 require __DIR__.'/auth.php';

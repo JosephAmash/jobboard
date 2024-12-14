@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class JobController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
         $jobs = Job::active()
-            ->with('user')
+            ->with('User')
             ->latest()
             ->paginate(10);
 
-        return view('jobs.index', compact('jobs'));
+        return view ('jobs.index', compact('jobs'));
     }
 
     public function show(Job $job)
@@ -25,7 +27,8 @@ class JobController extends Controller
     public function create()
     {
         $this->authorize('create', Job::class);
-        return view('jobs.create');
+        return view ('jobs.create');
+
     }
 
     public function store(Request $request)
@@ -46,7 +49,8 @@ class JobController extends Controller
 
         $job = auth()->user()->jobs()->create($validated);
 
-        return redirect()->route('jobs.show', $job)
-            ->with('success', 'Stellenanzeige erfolgreich erstellt!');
+        return redirect()->route('job.show', $job)
+            ->with('success', 'Stellenanzeige erfolgreich erstellt');
+
     }
 }
